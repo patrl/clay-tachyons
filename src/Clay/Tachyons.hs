@@ -17,7 +17,7 @@ bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
 [bgCenter, bgTop, bgRight, bgBottom, bgLeft] = map
   ((<>) (backgroundRepeat noRepeat) . backgroundPosition)
   [ placed sideCenter sideCenter
-  , placed sideTop sideCenter
+  , placed sideTop    sideCenter
   , placed sideCenter sideRight
   , placed sideBottom sideCenter
   , placed sideCenter sideLeft
@@ -27,8 +27,8 @@ bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
 -- background size --
 ---------------------
 
-cover,contain :: Css
-[cover,contain] = map (important . backgroundSize) [ Clay.cover, Clay.contain ]
+cover, contain :: Css
+[cover, contain] = map (important . backgroundSize) [Clay.cover, Clay.contain]
 
 ------------------
 -- break-points --
@@ -104,5 +104,42 @@ link = textDecoration none
 -- colors --
 ------------
 
-black :: Color
-black = map rgb [(0 0 0)]
+-- >>> :t uncurry
+-- uncurry :: (a -> b -> c) -> (a, b) -> c
+uncurry2 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry2 f = \(x, y, z) -> f x y z
+--
+-- uncurry rgb :: (Integer, Integer) -> Integer -> Color
+-- >>> :t uncurry rgb
+-- uncurry rgb :: (Integer, Integer) -> Integer -> Color
+
+black, nearBlack, darkGray, midGray, gray, silver, lightSilver, moonGray, nearWhite, white, transparent, black90, black80, black70, black60, black50, black40, black30, black20, black10, black05, black025, black0125
+  :: Color
+[black, nearBlack, darkGray, midGray, gray, silver, lightSilver, moonGray, nearWhite, white, transparent, black90, black80, black70, black60, black50, black40, black30, black20, black10, black05, black025, black0125]
+  = map
+      (uncurry2 rgb)
+      [ (0  , 0  , 0)
+      , (1  , 1  , 1)
+      , (3  , 3  , 3)
+      , (5  , 5  , 5)
+      , (7  , 7  , 7)
+      , (9  , 9  , 9)
+      , (170, 170, 170)
+      , (204, 204, 204)
+      , (244, 244, 244)
+      , (255, 255, 255)
+      ]
+    ++ [ Clay.transparent
+       , rgba 0 0 0 0.9
+       , rgba 0 0 0 0.8
+       , rgba 0 0 0 0.7
+       , rgba 0 0 0 0.6
+       , rgba 0 0 0 0.5
+       , rgba 0 0 0 0.4
+       , rgba 0 0 0 0.3
+       , rgba 0 0 0 0.2
+       , rgba 0 0 0 0.1
+       , rgba 0 0 0 0.05
+       , rgba 0 0 0 0.025
+       , rgba 0 0 0 0.0125
+       ]

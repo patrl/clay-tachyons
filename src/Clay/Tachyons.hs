@@ -13,7 +13,22 @@ import           Prelude                 hiding ( rem
 -- background position --
 -------------------------
 
+bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
+[bgCenter, bgTop, bgRight, bgBottom, bgLeft] = map
+  ((<>) (backgroundRepeat noRepeat) . backgroundPosition)
+  [ placed sideCenter sideCenter
+  , placed sideTop sideCenter
+  , placed sideCenter sideRight
+  , placed sideBottom sideCenter
+  , placed sideCenter sideLeft
+  ]
 
+---------------------
+-- background size --
+---------------------
+
+cover,contain :: Css
+[cover,contain] = map (important . backgroundSize) [ Clay.cover, Clay.contain ]
 
 ------------------
 -- break-points --
@@ -84,3 +99,10 @@ tl, tr, tc, tj :: Css
 
 link :: Css
 link = textDecoration none
+
+------------
+-- colors --
+------------
+
+black :: Color
+black = map rgb [(0 0 0)]

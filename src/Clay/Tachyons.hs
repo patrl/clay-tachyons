@@ -8,7 +8,7 @@ import           Prelude                 hiding ( rem
                                                 , div
                                                 , span
                                                 )
-import Control.Applicative (liftA2)
+import           Control.Applicative
 
 -------------------------
 -- background position --
@@ -166,46 +166,6 @@ black, nearBlack, darkGray, midGray, gray, silver, lightSilver, moonGray, nearWh
 -- spacing --
 -------------
 
-pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7 :: Css
-[pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7] = map
-  ((uncurry3 padding) . valToQuad) spacings
-
-pl0,pl1,pl2,pl3,pl4,pl5,pl6,pl7 :: Css
-[pl0,pl1,pl2,pl3,pl4,pl5,pl6,pl7] = map paddingLeft spacings
-
-pr0,pr1,pr2,pr3,pr4,pr5,pr6,pr7 :: Css
-[pr0,pr1,pr2,pr3,pr4,pr5,pr6,pr7] = map paddingRight spacings
-
-pb0,pb1,pb2,pb3,pb4,pb5,pb6,pb7 :: Css
-[pb0,pb1,pb2,pb3,pb4,pb5,pb6,pb7] = map paddingBottom spacings
-
-pt0,pt1,pt2,pt3,pt4,pt5,pt6,pt7 :: Css
-[pt0,pt1,pt2,pt3,pt4,pt5,pt6,pt7] = map paddingTop spacings
-
-pv0,pv1,pv2,pv3,pv4,pv5,pv6,pv7 :: Css
-[pv0,pv1,pv2,pv3,pv4,pv5,pv6,pv7] = liftA2 mappend (map paddingTop spacings) (map paddingBottom spacings)
-
-ph0,ph1,ph2,ph3,ph4,ph5,ph6,ph7 :: Css
-[ph0,ph1,ph2,ph3,ph4,ph5,ph6,ph7] = liftA2 mappend (map paddingLeft spacings) (map paddingRight spacings)
-
-ma0,ma1,ma2,ma3,ma4,ma5,ma6,ma7 :: Css
-[ma0,ma1,ma2,ma3,ma4,ma5,ma6,ma7] = map ((uncurry3 margin) . valToQuad) spacings
-
-mr0,mr1,mr2,mr3,mr4,mr5,mr6,mr7 :: Css
-[mr0,mr1,mr2,mr3,mr4,mr5,mr6,mr7] = map marginRight spacings
-
-mb0,mb1,mb2,mb3,mb4,mb5,mb6,mb7 :: Css
-[mb0,mb1,mb2,mb3,mb4,mb5,mb6,mb7] = map marginBottom spacings
-
-mt0,mt1,mt2,mt3,mt4,mt5,mt6,mt7 :: Css
-[mt0,mt1,mt2,mt3,mt4,mt5,mt6,mt7] = map marginTop spacings
-
-mv0,mv1,mv2,mv3,mv4,mv5,mv6,mv7 :: Css
-[mv0,mv1,mv2,mv3,mv4,mv5,mv6,mv7] = liftA2 mappend (map marginTop spacings) (map marginBottom spacings)
-
-mh0,mh1,mh2,mh3,mh4,mh5,mh6,mh7 :: Css
-[mh0,mh1,mh2,mh3,mh4,mh5,mh6,mh7] = liftA2 mappend (map marginLeft spacings) (map marginRight spacings)
-
 spacingNone, spacingXS, spacingS, spacingM, spacingL, spacingXL, spacingXXL, spacingXXXL
   :: Size LengthUnit
 [spacingNone, spacingXS, spacingS, spacingM, spacingL, spacingXL, spacingXXL, spacingXXXL]
@@ -213,15 +173,174 @@ spacingNone, spacingXS, spacingS, spacingM, spacingL, spacingXL, spacingXXL, spa
 
 -- TODO PR for clay adding an Enum instance for LengthUnit.
 spacings :: [Size LengthUnit]
-spacings = [spacingNone, spacingXS, spacingS, spacingM, spacingL, spacingXL, spacingXXL, spacingXXXL]
+spacings =
+  [ spacingNone
+  , spacingXS
+  , spacingS
+  , spacingM
+  , spacingL
+  , spacingXL
+  , spacingXXL
+  , spacingXXXL
+  ]
 
-valToQuad :: a -> (a, a, a, a)
-valToQuad x = (x, x, x, x)
+pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7 :: Css
+[pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7] =
+  map ((uncurry3 padding) . (\x -> (x, x, x, x))) spacings
 
-doubleList :: Double -> Double -> [Double]
-doubleList startVal endVal = if startVal /= endVal
-  then startVal : (doubleList (startVal * 2) endVal)
-  else []
+pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7 :: Css
+[pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7] = map paddingLeft spacings
 
--- >>> doubleList 0.25 16-- [0.25,0.5,0.5,1.0,1.0,2.0,2.0,4.0,4.0,8.0,8.0,16.0]
--- [0.25,0.5,1.0,2.0,4.0,8.0]
+pr0, pr1, pr2, pr3, pr4, pr5, pr6, pr7 :: Css
+[pr0, pr1, pr2, pr3, pr4, pr5, pr6, pr7] = map paddingRight spacings
+
+pb0, pb1, pb2, pb3, pb4, pb5, pb6, pb7 :: Css
+[pb0, pb1, pb2, pb3, pb4, pb5, pb6, pb7] = map paddingBottom spacings
+
+pt0, pt1, pt2, pt3, pt4, pt5, pt6, pt7 :: Css
+[pt0, pt1, pt2, pt3, pt4, pt5, pt6, pt7] = map paddingTop spacings
+
+pv0, pv1, pv2, pv3, pv4, pv5, pv6, pv7 :: Css
+[pv0, pv1, pv2, pv3, pv4, pv5, pv6, pv7] =
+  liftA2 mappend (map paddingTop spacings) (map paddingBottom spacings)
+
+ph0, ph1, ph2, ph3, ph4, ph5, ph6, ph7 :: Css
+[ph0, ph1, ph2, ph3, ph4, ph5, ph6, ph7] =
+  liftA2 mappend (map paddingLeft spacings) (map paddingRight spacings)
+
+ma0, ma1, ma2, ma3, ma4, ma5, ma6, ma7 :: Css
+[ma0, ma1, ma2, ma3, ma4, ma5, ma6, ma7] =
+  map ((uncurry3 margin) . (\x -> (x, x, x, x))) spacings
+
+mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7 :: Css
+[mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7] = map marginRight spacings
+
+mb0, mb1, mb2, mb3, mb4, mb5, mb6, mb7 :: Css
+[mb0, mb1, mb2, mb3, mb4, mb5, mb6, mb7] = map marginBottom spacings
+
+mt0, mt1, mt2, mt3, mt4, mt5, mt6, mt7 :: Css
+[mt0, mt1, mt2, mt3, mt4, mt5, mt6, mt7] = map marginTop spacings
+
+mv0, mv1, mv2, mv3, mv4, mv5, mv6, mv7 :: Css
+[mv0, mv1, mv2, mv3, mv4, mv5, mv6, mv7] =
+  liftA2 mappend (map marginTop spacings) (map marginBottom spacings)
+
+mh0, mh1, mh2, mh3, mh4, mh5, mh6, mh7 :: Css
+[mh0, mh1, mh2, mh3, mh4, mh5, mh6, mh7] =
+  liftA2 mappend (map marginLeft spacings) (map marginRight spacings)
+
+------------
+-- floats --
+------------
+
+fl, fr, fn :: Css
+[fl, fr, fn] =
+  (map (mappend (display inline)) [float floatLeft, float floatRight])
+    ++ [float none]
+
+------------
+-- clears --
+------------
+
+cl, cr, cb, cn :: Css
+[cl, cr, cb, cn] = map clear [clearLeft, clearRight, both, none]
+
+----------
+-- code --
+----------
+
+pre :: Css
+pre = overflow scroll <> overflowX auto <> overflowY hidden
+
+-------------
+-- display --
+-------------
+
+dn, di, db, dib, dit, dt, dtc, dtRow, dtRowGroup, dtColumn, dtColumnGroup :: Css
+[dn, di, db, dib, dit, dt, dtc, dtRow, dtRowGroup, dtColumn, dtColumnGroup] =
+  map
+    display
+    [ none
+    , inline
+    , block
+    , inlineBlock
+    , inlineTable
+    , displayTable
+    , tableCell
+    , tableRow
+    , tableRowGroup
+    , tableColumn
+    , tableColumnGroup
+    ]
+
+-- TODO dtFixed
+
+-----------------
+-- font-family --
+-----------------
+
+_sansSerif :: Css
+_sansSerif = fontFamily
+  [ "avenir next"
+  , "avenir"
+  , "helvetica"
+  , "helvetica neue"
+  , "ubuntu"
+  , "roboto"
+  , "noto"
+  , "segoe ui"
+  , "arial"
+  ]
+  [sansSerif]
+
+_serif :: Css
+_serif = georgia
+
+sysSans, sysSerif :: Css
+[sysSans, sysSerif] = fontFamily [] <$> [[sansSerif], [serif]]
+
+code, courier :: Css
+[code, courier] =
+  (fontFamily <$> [["Consolas", "Monaco"], ["Courier Next", "courier"]])
+    <*> pure [monospace]
+
+helvetica, avenir :: Css
+[helvetica, avenir] =
+  (fontFamily <$> [["helvetica neue", "helvetica"], ["avenir next", "avenir"]])
+    <*> pure [sansSerif]
+
+athelas, georgia, times, bodoni, calisto, garamond, baskerville :: Css
+[athelas, georgia, times, bodoni, calisto, garamond, baskerville] =
+  (   fontFamily
+    <$> [ ["athelas", "georgia"]
+        , ["georgia"]
+        , ["times"]
+        , ["Bodoni MT"]
+        , ["Calisto MT"]
+        , ["garamond"]
+        , ["baskerville"]
+        ]
+    )
+    <*> pure [serif]
+
+----------------
+-- font-style --
+----------------
+
+_i, _fsNormal :: Css
+[_i, _fsNormal] = fontStyle <$> [italic, normal]
+
+-----------------
+-- font weight --
+-----------------
+
+_normal, _b, fw1, fw2, fw3, fw4, fw5, fw6, fw7, fw8, fw9 :: Css
+[_normal, _b, fw1, fw2, fw3, fw4, fw5, fw6, fw7, fw8, fw9] =
+  fontWeight
+    <$> (  [normal, bold]
+        <> (weight <$> [100, 200, 300, 400, 500, 600, 700, 800, 900])
+        )
+
+------------
+-- widths --
+------------

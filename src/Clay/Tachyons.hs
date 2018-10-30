@@ -96,7 +96,7 @@ strike, underline, noUnderline :: Css
 
 tl, tr, tc, tj :: Css
 [tl, tr, tc, tj] =
-  map textAlign $ (map alignSide [sideLeft, sideRight]) <> [center, justify]
+  map textAlign $ (alignSide <$> [sideLeft, sideRight]) <> [center, justify]
 
 link :: Css
 link = textDecoration none
@@ -344,3 +344,37 @@ _normal, _b, fw1, fw2, fw3, fw4, fw5, fw6, fw7, fw8, fw9 :: Css
 ------------
 -- widths --
 ------------
+
+widths :: [Size LengthUnit]
+widths = rem <$> [1, 2, 4, 8, 16]
+
+w1, w2, w3, w4, w5 :: Css
+[w1, w2, w3, w4, w5] = width <$> widths
+
+w10, w20, w25, w30, w33, w34, w40, w50, w60, w70, w75, w80, w90, w100 :: Css
+[w10, w20, w25, w30, w33, w34, w40, w50, w60, w70, w75, w80, w90, w100] =
+  (width :: Size Percentage -> Css)
+    <$> [10, 20, 25, 30, 33, 34, 40, 50, 60, 70, 75, 80, 90, 100]
+
+wThird :: Css
+wThird = width $ (100 :: Size Percentage) @/ 3
+
+wTwoThirds :: Css
+wTwoThirds = width $ (100 :: Size Percentage) @/ 1.5
+
+wAuto :: Css
+wAuto = width auto
+
+----------------
+-- max widths --
+----------------
+
+mw100 :: Css
+mw100 = maxWidth (100 :: Size Percentage)
+
+mw1, mw2, mw3, mw4, mw5, mw6, mw7, mw8, mw9 :: Css
+[mw1, mw2, mw3, mw4, mw5, mw6, mw7, mw8, mw9] =
+  (maxWidth <$> widths) <> (maxWidth . rem <$> [32, 48, 64, 96])
+
+mwNone :: Css
+mwNone = maxWidth none

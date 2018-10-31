@@ -100,18 +100,6 @@ link = textDecoration none
 -- colors --
 ------------
 
--- >>> :t uncurry
--- uncurry :: (a -> b -> c) -> (a, b) -> c
-uncurry2 :: (a -> b -> c -> d) -> (a, b, c) -> d
-uncurry2 f (x,y,z) = f x y z
-
-uncurry3 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
-uncurry3 f (x1, x2, x3, x4) = f x1 x2 x3 x4
---
--- uncurry rgb :: (Integer, Integer) -> Integer -> Color
--- >>> :t uncurry rgb
--- uncurry rgb :: (Integer, Integer) -> Integer -> Color
-
 black, nearBlack, darkGray, midGray, gray, silver, lightSilver, moonGray, nearWhite, white, transparent, black90, black80, black70, black60, black50, black40, black30, black20, black10, black05, black025, black0125, white90, white80, white70, white60, white50, white40, white30, white20, white10, white05, white025, white0125
   :: Color
 [black, nearBlack, darkGray, midGray, gray, silver, lightSilver, moonGray, nearWhite, white, transparent, black90, black80, black70, black60, black50, black40, black30, black20, black10, black05, black025, black0125, white90, white80, white70, white60, white50, white40, white30, white20, white10, white05, white025, white0125]
@@ -373,3 +361,34 @@ mw1, mw2, mw3, mw4, mw5, mw6, mw7, mw8, mw9 :: Css
 
 mwNone :: Css
 mwNone = maxWidth none
+
+-------------
+-- borders --
+-------------
+
+_ba, _bt, _br, _bb, _bl, _bn :: Css
+[_ba, _bt, _br, _bb, _bl, _bn] =
+  [borderStyle solid <> borderWidth (px 1)]
+    <> [borderTopStyle solid <> borderTopWidth (px 1)]
+    <> [borderRightStyle solid <> borderRightWidth (px 1)]
+    <> [borderBottomStyle solid <> borderBottomWidth (px 1)]
+    <> [borderLeftStyle solid <> borderLeftWidth (px 1)]
+    <> [borderStyle none <> borderWidth 0]
+
+------------------
+-- border-style --
+------------------
+
+_bDotted, _bDashed, _bSolid, _bNone :: Css
+[_bDotted, _bDashed, _bSolid, _bNone] =
+  map borderStyle [dotted, dashed, solid, none]
+
+----------------------
+-- helper functions --
+----------------------
+
+uncurry2 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry2 f (x, y, z) = f x y z
+
+uncurry3 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
+uncurry3 f (x1, x2, x3, x4) = f x1 x2 x3 x4

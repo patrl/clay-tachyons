@@ -16,13 +16,8 @@ import           Control.Applicative
 
 bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
 [bgCenter, bgTop, bgRight, bgBottom, bgLeft] = map
-  ((<>) (backgroundRepeat noRepeat) . backgroundPosition)
-  [ placed sideCenter sideCenter
-  , placed sideTop    sideCenter
-  , placed sideCenter sideRight
-  , placed sideBottom sideCenter
-  , placed sideCenter sideLeft
-  ]
+  ((<>) (backgroundRepeat noRepeat) . backgroundPosition . uncurry placed)
+  [(sideCenter, sideCenter), (sideTop, sideCenter), (sideCenter, sideLeft)]
 
 ---------------------
 -- background size --
@@ -108,10 +103,10 @@ link = textDecoration none
 -- >>> :t uncurry
 -- uncurry :: (a -> b -> c) -> (a, b) -> c
 uncurry2 :: (a -> b -> c -> d) -> (a, b, c) -> d
-uncurry2 f = \(x, y, z) -> f x y z
+uncurry2 f (x,y,z) = f x y z
 
 uncurry3 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
-uncurry3 f = \(x1, x2, x3, x4) -> f x1 x2 x3 x4
+uncurry3 f (x1, x2, x3, x4) = f x1 x2 x3 x4
 --
 -- uncurry rgb :: (Integer, Integer) -> Integer -> Color
 -- >>> :t uncurry rgb
@@ -186,7 +181,7 @@ spacings =
 
 pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7 :: Css
 [pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7] =
-  map ((uncurry3 padding) . (\x -> (x, x, x, x))) spacings
+  map (uncurry3 padding . (\x -> (x, x, x, x))) spacings
 
 pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7 :: Css
 [pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7] = map paddingLeft spacings
@@ -210,7 +205,7 @@ ph0, ph1, ph2, ph3, ph4, ph5, ph6, ph7 :: Css
 
 ma0, ma1, ma2, ma3, ma4, ma5, ma6, ma7 :: Css
 [ma0, ma1, ma2, ma3, ma4, ma5, ma6, ma7] =
-  map ((uncurry3 margin) . (\x -> (x, x, x, x))) spacings
+  map (uncurry3 margin . (\x -> (x, x, x, x))) spacings
 
 mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7 :: Css
 [mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7] = map marginRight spacings
@@ -235,7 +230,7 @@ mh0, mh1, mh2, mh3, mh4, mh5, mh6, mh7 :: Css
 
 fl, fr, fn :: Css
 [fl, fr, fn] =
-  (map (mappend (display inline)) [float floatLeft, float floatRight])
+  map (mappend (display inline)) [float floatLeft, float floatRight]
     ++ [float none]
 
 ------------

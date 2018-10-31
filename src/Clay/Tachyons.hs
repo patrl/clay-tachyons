@@ -39,8 +39,12 @@ bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
 -- background size --
 ---------------------
 
-cover, contain :: Css
-[cover, contain] = important . backgroundSize <$> [Clay.cover, Clay.contain]
+_cover, _contain :: Css
+[_cover, _contain] = important . backgroundSize <$> [Clay.cover, Clay.contain]
+
+_backgroundSize :: Css
+_backgroundSize = (".cover" ? _cover) <> (".contain" ? _contain)
+
 
 ----------------
 -- box sizing --
@@ -141,8 +145,15 @@ tl, tr, tc, tj :: Css
 [tl, tr, tc, tj] =
   textAlign <$> (alignSide <$> [sideLeft, sideRight]) <> [center, justify]
 
-link :: Css
-link = textDecoration none
+-----------
+-- links --
+-----------
+
+_link :: Css
+_link = textDecoration none
+
+_links :: Css
+_links = ".link" ? _link
 
 ------------
 -- colors --

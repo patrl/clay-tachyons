@@ -383,6 +383,23 @@ _bDotted, _bDashed, _bSolid, _bNone :: Css
 [_bDotted, _bDashed, _bSolid, _bNone] =
   map borderStyle [dotted, dashed, solid, none]
 
+-------------------
+-- border widths --
+-------------------
+
+_bw0, _bw1, _bw2, _bw3, _bw4, _bw5 :: Css
+[_bw0, _bw1, _bw2, _bw3, _bw4, _bw5] =
+  map borderWidth ([none] <> _borderWidths)
+
+_borderWidths :: [Size LengthUnit]
+_borderWidths = map rem [0.125, 0.25, 0.5, 1.0, 2.2]
+
+-- resets
+_bt0, _br0, _bb0, _bl0 :: Css
+[_bt0, _br0, _bb0, _bl0] =
+  [borderTopWidth, borderRightWidth, borderBottomWidth, borderLeftWidth]
+    <*> [none]
+
 ----------------------
 -- helper functions --
 ----------------------

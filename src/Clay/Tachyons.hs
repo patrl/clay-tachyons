@@ -400,6 +400,24 @@ _bt0, _br0, _bb0, _bl0 :: Css
   [borderTopWidth, borderRightWidth, borderBottomWidth, borderLeftWidth]
     <*> [none]
 
+-------------------
+-- border radius --
+-------------------
+
+_borderRadii :: [Size LengthUnit]
+_borderRadii = map rem [0.125, 0.25, 0.5, 1.0, 2.0]
+
+_brad0, _brad1, _brad2, _brad3, _brad4 :: Css
+[_brad0, _brad1, _brad2, _brad3, _brad4] = map
+  (uncurry3 borderRadius)
+  ([(\x -> (x, x, x, x)) none] <> map (\x -> (x, x, x, x)) _borderRadii)
+
+_bradCircle :: Css
+_bradCircle = uncurry3 borderRadius ((\x -> (x,x,x,x)) (100 :: Size Percentage))
+
+_bradPill :: Css
+_bradPill = uncurry3 borderRadius ((\x -> (x,x,x,x)) (px 9999))
+
 ----------------------
 -- helper functions --
 ----------------------

@@ -10,6 +10,19 @@ import           Prelude                 hiding ( rem
                                                 )
 import           Control.Applicative
 
+------------------
+-- break-points --
+------------------
+
+-- break points can be combined with any other css via application
+ns, m, l :: Css -> Css
+[ns, m, l] = map
+  (query Mq.screen)
+  [ [Mq.minWidth $ em 30]
+  , [Mq.minWidth $ em 30, Mq.maxWidth $ em 60]
+  , [Mq.minWidth $ em 60]
+  ]
+
 -------------------------
 -- background position --
 -------------------------
@@ -26,19 +39,51 @@ bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
 cover, contain :: Css
 [cover, contain] = map (important . backgroundSize) [Clay.cover, Clay.contain]
 
-------------------
--- break-points --
-------------------
-
-ns, m, l :: Css -> Css
-[ns, m, l] = map
-  (query Mq.screen)
-  [ [Mq.minWidth $ em 30]
-  , [Mq.minWidth $ em 30, Mq.maxWidth $ em 60]
-  , [Mq.minWidth $ em 60]
-  ]
-
 ----------------
+-- box sizing --
+----------------
+
+-- TODO add input selections
+
+_borderBox :: Css
+_borderBox =
+  mconcat
+      [ html
+      , body
+      , div
+      , article
+      , section
+      , main_
+      , footer
+      , header
+      , form
+      , fieldset
+      , legend
+      , Clay.pre
+      , Clay.code
+      , a
+      , h1
+      , h2
+      , h3
+      , h4
+      , h5
+      , h6
+      , p
+      , ul
+      , ol
+      , li
+      , dl
+      , Clay.dt
+      , dd
+      , textarea
+      , table
+      , td
+      , th
+      , Clay.tr
+      , ".border-box"
+      ]
+    ? boxSizing borderBox
+
 -- type scale --
 ----------------
 
@@ -413,10 +458,11 @@ _brad0, _brad1, _brad2, _brad3, _brad4 :: Css
   ([(\x -> (x, x, x, x)) none] <> map (\x -> (x, x, x, x)) _borderRadii)
 
 _bradCircle :: Css
-_bradCircle = uncurry3 borderRadius ((\x -> (x,x,x,x)) (100 :: Size Percentage))
+_bradCircle =
+  uncurry3 borderRadius ((\x -> (x, x, x, x)) (100 :: Size Percentage))
 
 _bradPill :: Css
-_bradPill = uncurry3 borderRadius ((\x -> (x,x,x,x)) (px 9999))
+_bradPill = uncurry3 borderRadius ((\x -> (x, x, x, x)) (px 9999))
 
 ----------------------
 -- helper functions --

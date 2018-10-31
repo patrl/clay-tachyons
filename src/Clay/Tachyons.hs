@@ -16,28 +16,31 @@ import           Control.Applicative
 
 -- break points can be combined with any other css via application
 ns, m, l :: Css -> Css
-[ns, m, l] = map
-  (query Mq.screen)
-  [ [Mq.minWidth $ em 30]
-  , [Mq.minWidth $ em 30, Mq.maxWidth $ em 60]
-  , [Mq.minWidth $ em 60]
-  ]
+[ns, m, l] =
+  query Mq.screen
+    <$> [ [Mq.minWidth $ em 30]
+        , [Mq.minWidth $ em 30, Mq.maxWidth $ em 60]
+        , [Mq.minWidth $ em 60]
+        ]
 
 -------------------------
 -- background position --
 -------------------------
 
 bgCenter, bgTop, bgRight, bgBottom, bgLeft :: Css
-[bgCenter, bgTop, bgRight, bgBottom, bgLeft] = map
+[bgCenter, bgTop, bgRight, bgBottom, bgLeft] =
   ((<>) (backgroundRepeat noRepeat) . backgroundPosition . uncurry placed)
-  [(sideCenter, sideCenter), (sideTop, sideCenter), (sideCenter, sideLeft)]
+    <$> [ (sideCenter, sideCenter)
+        , (sideTop   , sideCenter)
+        , (sideCenter, sideLeft)
+        ]
 
 ---------------------
 -- background size --
 ---------------------
 
 cover, contain :: Css
-[cover, contain] = map (important . backgroundSize) [Clay.cover, Clay.contain]
+[cover, contain] = important . backgroundSize <$> [Clay.cover, Clay.contain]
 
 ----------------
 -- box sizing --
@@ -89,14 +92,14 @@ _borderBox =
 
 fH, fSubH, f1, f2, f3, f4, f5, f6, f7 :: Css
 [fH, fSubH, f1, f2, f3, f4, f5, f6, f7] =
-  map (fontSize . rem) [6.0, 5.0, 3.0, 2.25, 1.5, 1.25, 1.0, 0.875, 0.75]
+  fontSize . rem <$> [6.0, 5.0, 3.0, 2.25, 1.5, 1.25, 1.0, 0.875, 0.75]
 
 ----------------
 -- typography --
 ----------------
 
 measure, measureWide, measureNarrow :: Css
-[measure, measureWide, measureNarrow] = map (maxWidth . em) [30, 34, 20]
+[measure, measureWide, measureNarrow] = maxWidth . em <$> [30, 34, 20]
 
 indent :: Css
 indent =
@@ -112,7 +115,7 @@ truncate =
   whiteSpace nowrap <> overflow hidden <> textOverflow overflowEllipsis
 
 lhCopy, lhTitle, lhSolid :: Css
-[lhCopy, lhTitle, lhSolid] = map (lineHeight . unitless) [1.5, 1.25, 1.0]
+[lhCopy, lhTitle, lhSolid] = lineHeight . unitless <$> [1.5, 1.25, 1.0]
 
 --------------------
 -- text transform --
@@ -120,7 +123,7 @@ lhCopy, lhTitle, lhSolid :: Css
 
 ttc, ttl, ttu, ttn :: Css
 [ttc, ttl, ttu, ttn] =
-  map textTransform [capitalize, lowercase, uppercase, none]
+  textTransform <$> [capitalize, lowercase, uppercase, none]
 
 ---------------------
 -- text decoration --
@@ -128,7 +131,7 @@ ttc, ttl, ttu, ttn :: Css
 
 strike, underline, noUnderline :: Css
 [strike, underline, noUnderline] =
-  map textDecoration [lineThrough, Clay.underline, none]
+  textDecoration <$> [lineThrough, Clay.underline, none]
 
 ----------------
 -- text align --
@@ -136,7 +139,7 @@ strike, underline, noUnderline :: Css
 
 tl, tr, tc, tj :: Css
 [tl, tr, tc, tj] =
-  map textAlign $ (alignSide <$> [sideLeft, sideRight]) <> [center, justify]
+  textAlign <$> (alignSide <$> [sideLeft, sideRight]) <> [center, justify]
 
 link :: Css
 link = textDecoration none
@@ -197,7 +200,7 @@ black, nearBlack, darkGray, midGray, gray, silver, lightSilver, moonGray, nearWh
 spacingNone, spacingXS, spacingS, spacingM, spacingL, spacingXL, spacingXXL, spacingXXXL
   :: Size LengthUnit
 [spacingNone, spacingXS, spacingS, spacingM, spacingL, spacingXL, spacingXXL, spacingXXXL]
-  = map rem [0, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0]
+  = rem <$> [0, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0]
 
 -- TODO PR for clay adding an Enum instance for LengthUnit.
 spacings :: [Size LengthUnit]
@@ -214,48 +217,48 @@ spacings =
 
 pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7 :: Css
 [pa0, pa1, pa2, pa3, pa4, pa5, pa6, pa7] =
-  map (uncurry3 padding . (\x -> (x, x, x, x))) spacings
+  uncurry3 padding . (\x -> (x, x, x, x)) <$> spacings
 
 pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7 :: Css
-[pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7] = map paddingLeft spacings
+[pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7] = paddingLeft <$> spacings
 
 pr0, pr1, pr2, pr3, pr4, pr5, pr6, pr7 :: Css
-[pr0, pr1, pr2, pr3, pr4, pr5, pr6, pr7] = map paddingRight spacings
+[pr0, pr1, pr2, pr3, pr4, pr5, pr6, pr7] = paddingRight <$> spacings
 
 pb0, pb1, pb2, pb3, pb4, pb5, pb6, pb7 :: Css
-[pb0, pb1, pb2, pb3, pb4, pb5, pb6, pb7] = map paddingBottom spacings
+[pb0, pb1, pb2, pb3, pb4, pb5, pb6, pb7] = paddingBottom <$> spacings
 
 pt0, pt1, pt2, pt3, pt4, pt5, pt6, pt7 :: Css
-[pt0, pt1, pt2, pt3, pt4, pt5, pt6, pt7] = map paddingTop spacings
+[pt0, pt1, pt2, pt3, pt4, pt5, pt6, pt7] = paddingTop <$> spacings
 
 pv0, pv1, pv2, pv3, pv4, pv5, pv6, pv7 :: Css
 [pv0, pv1, pv2, pv3, pv4, pv5, pv6, pv7] =
-  liftA2 mappend (map paddingTop spacings) (map paddingBottom spacings)
+  liftA2 mappend (paddingTop <$> spacings) (paddingBottom <$> spacings)
 
 ph0, ph1, ph2, ph3, ph4, ph5, ph6, ph7 :: Css
 [ph0, ph1, ph2, ph3, ph4, ph5, ph6, ph7] =
-  liftA2 mappend (map paddingLeft spacings) (map paddingRight spacings)
+  liftA2 mappend (paddingLeft <$> spacings) (paddingRight <$> spacings)
 
 ma0, ma1, ma2, ma3, ma4, ma5, ma6, ma7 :: Css
 [ma0, ma1, ma2, ma3, ma4, ma5, ma6, ma7] =
-  map (uncurry3 margin . (\x -> (x, x, x, x))) spacings
+  uncurry3 margin . (\x -> (x, x, x, x)) <$> spacings
 
 mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7 :: Css
-[mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7] = map marginRight spacings
+[mr0, mr1, mr2, mr3, mr4, mr5, mr6, mr7] = marginRight <$> spacings
 
 mb0, mb1, mb2, mb3, mb4, mb5, mb6, mb7 :: Css
-[mb0, mb1, mb2, mb3, mb4, mb5, mb6, mb7] = map marginBottom spacings
+[mb0, mb1, mb2, mb3, mb4, mb5, mb6, mb7] = marginBottom <$> spacings
 
 mt0, mt1, mt2, mt3, mt4, mt5, mt6, mt7 :: Css
-[mt0, mt1, mt2, mt3, mt4, mt5, mt6, mt7] = map marginTop spacings
+[mt0, mt1, mt2, mt3, mt4, mt5, mt6, mt7] = marginTop <$> spacings
 
 mv0, mv1, mv2, mv3, mv4, mv5, mv6, mv7 :: Css
 [mv0, mv1, mv2, mv3, mv4, mv5, mv6, mv7] =
-  liftA2 mappend (map marginTop spacings) (map marginBottom spacings)
+  liftA2 mappend (marginTop <$> spacings) (marginBottom <$> spacings)
 
 mh0, mh1, mh2, mh3, mh4, mh5, mh6, mh7 :: Css
 [mh0, mh1, mh2, mh3, mh4, mh5, mh6, mh7] =
-  liftA2 mappend (map marginLeft spacings) (map marginRight spacings)
+  liftA2 mappend (marginLeft <$> spacings) (marginRight <$> spacings)
 
 ------------
 -- floats --
@@ -373,11 +376,11 @@ _normal, _b, fw1, fw2, fw3, fw4, fw5, fw6, fw7, fw8, fw9 :: Css
 -- widths --
 ------------
 
-widths :: [Size LengthUnit]
-widths = rem <$> [1, 2, 4, 8, 16]
+_widths :: [Size LengthUnit]
+_widths = rem <$> [1, 2, 4, 8, 16]
 
 w1, w2, w3, w4, w5 :: Css
-[w1, w2, w3, w4, w5] = width <$> widths
+[w1, w2, w3, w4, w5] = width <$> _widths
 
 w10, w20, w25, w30, w33, w34, w40, w50, w60, w70, w75, w80, w90, w100 :: Css
 [w10, w20, w25, w30, w33, w34, w40, w50, w60, w70, w75, w80, w90, w100] =
@@ -393,6 +396,25 @@ wTwoThirds = width $ (100 :: Size Percentage) @/ 1.5
 wAuto :: Css
 wAuto = width auto
 
+-------------
+-- heights --
+-------------
+
+_heights :: [Size LengthUnit]
+_heights = rem <$> [1, 2, 4, 8, 16]
+
+_h1, _h2, _h3, _h4, _h5 :: Css
+[_h1, _h2, _h3, _h4, _h5] = height <$> _heights
+
+_h25, _h50, _h75, _h100 :: Css
+[_h25, _h50, _h75, _h100] =
+  height <$> ([25, 50, 75, 100] :: [Size Percentage])
+
+_minh100 :: Css
+_minh100 = minHeight (100 :: Size Percentage)
+
+-- TODO finish this off
+
 ----------------
 -- max widths --
 ----------------
@@ -402,7 +424,7 @@ mw100 = maxWidth (100 :: Size Percentage)
 
 mw1, mw2, mw3, mw4, mw5, mw6, mw7, mw8, mw9 :: Css
 [mw1, mw2, mw3, mw4, mw5, mw6, mw7, mw8, mw9] =
-  (maxWidth <$> widths) <> (maxWidth . rem <$> [32, 48, 64, 96])
+  (maxWidth <$> _widths) <> (maxWidth . rem <$> [32, 48, 64, 96])
 
 mwNone :: Css
 mwNone = maxWidth none
@@ -426,7 +448,7 @@ _ba, _bt, _br, _bb, _bl, _bn :: Css
 
 _bDotted, _bDashed, _bSolid, _bNone :: Css
 [_bDotted, _bDashed, _bSolid, _bNone] =
-  map borderStyle [dotted, dashed, solid, none]
+  borderStyle <$> [dotted, dashed, solid, none]
 
 -------------------
 -- border widths --
@@ -434,10 +456,10 @@ _bDotted, _bDashed, _bSolid, _bNone :: Css
 
 _bw0, _bw1, _bw2, _bw3, _bw4, _bw5 :: Css
 [_bw0, _bw1, _bw2, _bw3, _bw4, _bw5] =
-  map borderWidth ([none] <> _borderWidths)
+  borderWidth <$> ([none] <> _borderWidths)
 
 _borderWidths :: [Size LengthUnit]
-_borderWidths = map rem [0.125, 0.25, 0.5, 1.0, 2.2]
+_borderWidths = rem <$> [0.125, 0.25, 0.5, 1.0, 2.2]
 
 -- resets
 _bt0, _br0, _bb0, _bl0 :: Css
@@ -450,12 +472,12 @@ _bt0, _br0, _bb0, _bl0 :: Css
 -------------------
 
 _borderRadii :: [Size LengthUnit]
-_borderRadii = map rem [0.125, 0.25, 0.5, 1.0, 2.0]
+_borderRadii = rem <$> [0.125, 0.25, 0.5, 1.0, 2.0]
 
 _brad0, _brad1, _brad2, _brad3, _brad4 :: Css
-[_brad0, _brad1, _brad2, _brad3, _brad4] = map
-  (uncurry3 borderRadius)
-  ([(\x -> (x, x, x, x)) none] <> map (\x -> (x, x, x, x)) _borderRadii)
+[_brad0, _brad1, _brad2, _brad3, _brad4] =
+  uncurry3 borderRadius
+    <$> ([(\x -> (x, x, x, x)) none] <> ((\x -> (x, x, x, x)) <$> _borderRadii))
 
 _bradCircle :: Css
 _bradCircle =
